@@ -1,0 +1,129 @@
+// You are on the USB. :3
+
+/* ---------------------- DO NOT TOUCH ---------------------- */
+#include "Functions.h"
+
+#define S forwardStart
+#define E forwardEnd
+
+#define F forwardOneSquare
+#define B backwardOneSquare
+#define L turnLeft
+#define R turnRight
+/* ----------------------------------------------------------- */
+
+
+/* ----------------------- EDIT THESE ------------------------ */
+#define PRINT_TIME // Comment after you're done (if you want).
+
+void sequence() {
+  S(); // Start
+
+  L();
+  F();
+
+  R();
+  F();
+
+  L();
+  F();
+  F();
+
+  L();
+  F();
+
+  L();
+  F(); // at gate A
+
+  B();
+
+  L();
+  F();
+
+  R();
+  F();
+  F();
+
+  R();
+  F();
+
+  L();
+  F(); // at start square
+
+  L();
+
+
+  F(); // other gates
+  F();
+  F();
+
+  L();
+  F();
+
+  L();
+  F();
+
+  R();
+  F();
+
+  R();
+  F(); // at endpoint
+
+  L();
+  F();
+
+  L();
+  F();
+
+  B();
+
+  L();
+
+  E(); // End
+}
+
+void setup() {
+  #ifndef NO_WAIT
+
+  /* ADJUST THESE VALUES ACCORDINGLY */
+  w.targetTime = 60000;
+  w.numOfOneSquare = 20 + 2; // # of F() + B()
+  w.numOfTurn = 5 + 12; // # of R() + L()
+  w.turnTime = 2500; // 2300 <= turnTime <= 4500 (maybe a bit more if ur feeling risky)
+
+/* ----------------------------------------------------------- */
+
+
+/* ---------------------- DO NOT TOUCH ----------------------- */
+  w.calculate();
+
+  #endif
+
+  #ifdef PRINT_TIME
+  Serial.begin(9600);
+  w.print();
+  Serial.end();
+  #endif
+
+  my_init();
+
+  while (!isRunning);
+  changeMode();
+
+  delay(1000);
+
+  mpu.calcGyroOffsets();
+
+  delay(300);
+
+  angle = round(mpu.getAngleZ());
+
+  sequence();
+
+  brake();
+
+  delay(5000);
+}
+
+void loop() {
+}
